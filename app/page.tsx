@@ -5,6 +5,7 @@ const inter = Inter({ subsets: ["latin"] });
 import { headers } from "next/headers";
 
 export default function Home() {
+  // Get the client's IP address from the request headers
   const ip = headers().get("x-forwarded-for");
 
   return (

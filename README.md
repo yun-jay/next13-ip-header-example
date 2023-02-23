@@ -18,35 +18,36 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ```js
 // middleware.ts
+
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  // Clone the request headers
+  // Clone the request headers so that we don't modify the original headers object
   const requestHeaders = new Headers(request.headers);
 
-  // 'request.ip' has the IP address of the `Request`, if provided by your hosting platform
+  // Check if the hosting platform provides the client's IP address and store it in a variable
   const ip = request.ip || "";
 
-  // Add new request headers
+  // Add the client's IP address to the request headers using the 'x-forwarded-for' field
   requestHeaders.set("x-forwarded-for", ip);
 
-  // You can also set request headers in NextResponse.rewrite
+  // Return a new request object with the updated headers using NextResponse.next()
   return NextResponse.next({
     request: {
-      // New request headers
       headers: requestHeaders,
     },
   });
 }
 ```
 
-```js
+````js
 // app/page.tsx
 
 import { headers } from "next/headers";
 
 export default function Home() {
+  // Get the client's IP address from the request headers
   const ip = headers().get("x-forwarded-for");
 
   return (
@@ -54,12 +55,12 @@ export default function Home() {
       <div className={styles.description}>
         <p>
           IP Address:
-          <code>{` ${ip}` || " Not found"}</code>
+          {` ${ip}` || " Not found"}
         </p>
         ...
       </div>
       ...
     </main>
   );
-}
-```
+}```
+````
