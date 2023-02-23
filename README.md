@@ -14,6 +14,8 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Solution
+
 ```js
 // middleware.ts
 import { NextResponse } from "next/server";
@@ -41,6 +43,9 @@ export function middleware(request: NextRequest) {
 
 ```js
 // app/page.tsx
+
+import { headers } from "next/headers";
+
 export default function Home() {
   const ip = headers().get("x-forwarded-for");
 
